@@ -160,7 +160,7 @@
                         category: 'marketplace',
                         title: 'City Bike for Sale',
                         content: 'Excellent condition city bike, perfect for commuting. Includes basket and lights.',
-                        contact: 'jan.smith@email.com',
+                        contact: 'anuj@email.com',
                         price: '₹98,000',
                         status: 'available',
                         date: new Date().toISOString(),
@@ -601,7 +601,7 @@
                     </div>
                 </div>
                 ${imageHtml}
-                <p style="color: var(--text-secondary); margin-bottom: 1rem;">${post.content}</p>
+                <p style="color: var(--text-sec); margin-bottom: 1rem;">${post.content}</p>
                 ${eventInfo}
                 <div class="post-meta">
                     <span>📅 ${formatDate(post.date)}</span>
