@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Board</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+    <!-- Admin Trigger Button -->
+    <button class="admin-trigger" onclick="openAdminPanel()">👨‍💼 Admin</button>
+
+    <!-- Admin Panel Overlay -->
+    <div class="admin-overlay" id="adminOverlay" onclick="closeAdminPanel()"></div>
+
+    <!-- Admin Panel -->
+    <div class="admin-panel" id="adminPanel">
+        <div class="admin-header">
+            <h3>Admin Panel</h3>
+            <button class="admin-close" onclick="closeAdminPanel()">×</button>
+        </div>
+
+        <!-- Login Form -->
+        <div class="login-form" id="loginForm">
+            <div class="form-group">
+                <label for="adminPassword">Admin Password:</label>
+                <input type="password" id="adminPassword" placeholder="Enter admin password">
+            </div>
+            <button class="btn btn-primary" onclick="adminLogin()">🔑 Login</button>
+        </div>
+
+        <!-- Admin Content -->
+        <div class="admin-content hidden" id="adminContent">
+            <div class="form-group">
+                <label for="postCategory">Category:</label>
+                <select id="postCategory">
+                    <option value="announcements">📢 Announcements</option>
+                    <option value="events">🎉 Events</option>
+                    <option value="marketplace">🛒 Marketplace</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="postTitle">Title:</label>
+                <input type="text" id="postTitle" placeholder="Enter post title">
+            </div>
+
+            <div class="form-group">
+                <label for="postContent">Content:</label>
+                <textarea id="postContent" rows="4" placeholder="Enter post content"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="postContact">Contact Info:</label>
+                <input type="text" id="postContact" placeholder="Email or phone number">
+            </div>
+
+            <div class="form-group" id="marketplaceFields" style="display: none;">
+                <label for="postPrice">Price:</label>
+                <input type="text" id="postPrice" placeholder="e.g., €150">
+                
+                <label for="postStatus" style="margin-top: 1rem;">Status:</label>
+                <select id="postStatus">
+                    <option value="available">Available</option>
+                    <option value="sold">Sold</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="eventFields" style="display: none;">
+                <label for="eventDate">Event Date:</label>
+                <input type="date" id="eventDate">
+                
+                <label for="eventTime" style="margin-top: 1rem;">Event Time:</label>
+                <input type="time" id="eventTime">
+            </div>
+
+            <div class="form-group">
+                <label for="postImage">Image (optional):</label>
+                <div class="file-input-wrapper">
+                    <input type="file" id="postImage" accept="image/*" onchange="previewImage(this)">
+                    📷 Choose Image
+                </div>
+                <img id="imagePreview" class="image-preview" alt="Preview">
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="pinPost"> 📌 Pin this post
+                </label>
+                <label>
+                    <input type="checkbox" id="urgentPost"> 🚨 Mark as urgent
+                </label>
+            </div>
+
+            <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                <button class="btn btn-success" onclick="savePost()">✨ Add Post</button>
+                <button class="btn btn-primary hidden" id="updateBtn" onclick="updatePost()">✏️ Update Post</button>
+                <button class="btn btn-danger hidden" id="cancelEditBtn" onclick="cancelEdit()">❌ Cancel</button>
+            </div>
+
+            <input type="hidden" id="editingPostId">
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">🌙</button>
+            <h1>🏘️ Neighborhood Nexus</h1>
+            <p>Your enhanced digital neighborhood connection</p>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('announcements')">📢 Announcements</button>
+            <button class="nav-tab" onclick="showSection('events')">🎉 Events</button>
+            <button class="nav-tab" onclick="showSection('marketplace')">🛒 Marketplace</button>
+            <button class="nav-tab" onclick="showSection('contacts')">📞 Contacts</button>
+            <button class="nav-tab" onclick="showSection('calendar')">📅 Calendar</button>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="tab-content">
+            <!-- Announcements Section -->
+            <div id="announcements" class="section active">
+                <h2>Community Announcements</h2>
+                <div id="announcementsList"></div>
+            </div>
+
+            <!-- Events Section -->
+            <div id="events" class="section">
+                <h2>Upcoming Events</h2>
+                <div id="eventsList"></div>
+            </div>
+
+            <!-- Marketplace Section -->
+            <div id="marketplace" class="section">
+                <h2>Community Marketplace</h2>
+                
+                <div class="search-filter-bar">
+                    <div class="form-group search-input">
+                        <input type="text" id="marketplaceSearch" placeholder="🔍 Search marketplace..." oninput="filterMarketplace()">
+                    </div>
+                    <div class="form-group filter-select">
+                        <select id="marketplaceFilter" onchange="filterMarketplace()">
+                            <option value="">All Items</option>
+                            <option value="available">Available</option>
+                            <option value="sold">Sold</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="marketplace-grid" id="marketplaceGrid"></div>
+            </div>
+
+            <!-- Contacts Section -->
+            <div id="contacts" class="section">
+                <h2>Community Contacts</h2>
+                
+                <div class="search-filter-bar">
+                    <div class="form-group search-input">
+                        <input type="text" id="contactSearch" placeholder="🔍 Search contacts..." oninput="filterContacts()">
+                    </div>
+                </div>
+
+                <div class="contact-grid" id="contactGrid"></div>
+            </div>
+
+            <!-- Calendar Section -->
+            <div id="calendar" class="section">
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <button class="btn btn-primary" onclick="previousMonth()">← Previous</button>
+                        <h2 id="calendarTitle">November 2024</h2>
+                        <button class="btn btn-primary" onclick="nextMonth()">Next →</button>
+                    </div>
+                    <div class="calendar-grid" id="calendarGrid"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
