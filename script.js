@@ -29,7 +29,7 @@
 
         // Theme Management
         function toggleTheme() {
-            currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+            currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
             setTheme(currentTheme);
         }
 
